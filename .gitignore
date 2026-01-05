@@ -1,0 +1,39 @@
+# Build directories
+/build/
+/bin/
+/out/
+*.o
+*.obj
+*.exe
+*.so
+*.dll
+*.a
+
+# CMake build files
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Generated files
+*.d
+*.gcno
+*.gcda
+*.gcov
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+*~
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Logs and temp
+*.log
+*.tmp
+*.temp
+
