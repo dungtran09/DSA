@@ -7,6 +7,9 @@ static size_t intercept_count = 0;
 void *__real_malloc(size_t size);
 
 // NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp)
+void __real_free(void *ptr);
+
+// NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp)
 void *__wrap_malloc(size_t size) {
   if (intercept_malloc) {
     ++intercept_count;
@@ -41,6 +44,9 @@ void *__wrap_realloc(void *ptr, size_t size) {
 
   return __real_realloc(ptr, size);
 }
+
+// NOLINTNEXTLINE(bugprone-reserved-identifier,cert-dcl37-c,cert-dcl51-cpp)
+void __wrap_free(void *ptr) { __real_free(ptr); };
 
 void InterceptMalloc() { intercept_malloc = true; }
 void ResetMalloc() {

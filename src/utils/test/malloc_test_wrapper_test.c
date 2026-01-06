@@ -2,13 +2,13 @@
 #include <stdlib.h>
 
 #include "CUnit/CUnit.h"
-#include "utils/test_helpers.h"
+#include "test_helpers.h"
 #if !defined(NDEBUG)
 #include "malloc_test_wrapper.h"
 #endif
 
 static void MallocWorksWithoutIntercept() {
-  void* test = malloc(100);
+  void *test = malloc(100);
   CU_ASSERT_PTR_NOT_NULL(test);
   free(test);
 }
@@ -16,12 +16,12 @@ static void MallocWorksWithoutIntercept() {
 static void MallocInterceptReturnNullAndResetReturnsPointer() {
 #if !defined(NDEBUG)
   InterceptMalloc();
-  void* test = malloc(100);
+  void *test = malloc(100);
   CU_ASSERT_PTR_NULL(test);
 
   ResetMalloc();
   test = malloc(100);
-  CU_ASSERT_PTR_NOT_NULL(test);  // NOLINT(clang-analyzer-unix.Malloc)
+  CU_ASSERT_PTR_NOT_NULL(test); // NOLINT(clang-analyzer-unix.Malloc)
   free(test);
 #endif
 }
@@ -31,7 +31,7 @@ static void MallocInterceptCountIncrementsAndResets() {
   CU_ASSERT_EQUAL(0, MallocInterceptCount());
 
   InterceptMalloc();
-  void* test = malloc(100);
+  void *test = malloc(100);
   CU_ASSERT_EQUAL(1, MallocInterceptCount());
   free(test);
   test = malloc(100);
@@ -47,7 +47,7 @@ static void MallocInterceptCountIncrementsAndResets() {
 }
 
 static void CallocWorksWithoutIntercept() {
-  void* test = calloc(100, 1);
+  void *test = calloc(100, 1);
   CU_ASSERT_PTR_NOT_NULL(test);
   free(test);
 }
@@ -55,12 +55,12 @@ static void CallocWorksWithoutIntercept() {
 static void CallocInterceptReturnNullAndResetReturnsPointer() {
 #if !defined(NDEBUG)
   InterceptMalloc();
-  void* test = calloc(100, 1);
+  void *test = calloc(100, 1);
   CU_ASSERT_PTR_NULL(test);
 
   ResetMalloc();
   test = calloc(100, 1);
-  CU_ASSERT_PTR_NOT_NULL(test);  // NOLINT(clang-analyzer-unix.Malloc)
+  CU_ASSERT_PTR_NOT_NULL(test); // NOLINT(clang-analyzer-unix.Malloc)
   free(test);
 #endif
 }
@@ -70,7 +70,7 @@ static void CallocInterceptCountIncrementsAndResets() {
   CU_ASSERT_EQUAL(0, MallocInterceptCount());
 
   InterceptMalloc();
-  void* test = calloc(100, 1);
+  void *test = calloc(100, 1);
   CU_ASSERT_EQUAL(1, MallocInterceptCount());
   free(test);
 
@@ -88,40 +88,40 @@ static void CallocInterceptCountIncrementsAndResets() {
 }
 
 static void ReallocWorksWithoutIntercept() {
-  void* test = malloc(100);
+  void *test = malloc(100);
   test = realloc(test, 1);
   CU_ASSERT_PTR_NOT_NULL(test);
-  free(test);  // NOLINT(clang-analyzer-unix.Malloc)
+  free(test); // NOLINT(clang-analyzer-unix.Malloc)
 }
 
 static void ReallocInterceptReturnNullAndResetReturnsPointer() {
 #if !defined(NDEBUG)
-  void* test = malloc(100);
+  void *test = malloc(100);
 
   InterceptMalloc();
-  void* test2 = realloc(test, 1);
+  void *test2 = realloc(test, 1);
   CU_ASSERT_PTR_NULL(test2);
 
   ResetMalloc();
 
-  test = realloc(test, 1);  // NOLINT(clang-analyzer-unix.Malloc)
+  test = realloc(test, 1); // NOLINT(clang-analyzer-unix.Malloc)
   CU_ASSERT_PTR_NOT_NULL(test);
-  free(test);  // NOLINT(clang-analyzer-unix.Malloc)
+  free(test); // NOLINT(clang-analyzer-unix.Malloc)
 #endif
 }
 
 static void ReallocInterceptCountIncrementsAndResets() {
 #if !defined(NDEBUG)
-  void* test = malloc(100);
+  void *test = malloc(100);
 
   CU_ASSERT_EQUAL(0, MallocInterceptCount());
 
   InterceptMalloc();
-  void* test2 = realloc(test, 1);
+  void *test2 = realloc(test, 1);
   CU_ASSERT_EQUAL(1, MallocInterceptCount());
   free(test2);
 
-  void* test3 = realloc(test, 1);  // NOLINT(clang-analyzer-unix.Malloc)
+  void *test3 = realloc(test, 1); // NOLINT(clang-analyzer-unix.Malloc)
   CU_ASSERT_EQUAL(2, MallocInterceptCount());
   free(test3);
 
