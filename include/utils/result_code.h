@@ -1,34 +1,90 @@
-#pragma once
+#ifndef RESULT_CODE_H
+#define RESULT_CODE_H
 
-#include <stdio.h>
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#define PRINT_ERROR(source, result)                                            \
-  {                                                                            \
-    int(fprint_result) = fprintf(stderr, "%s: %s, %s, %s, %d\n", source,       \
-                                 Result_ErrorMessage(result), __FILE__,        \
-                                 __FUNCTION__, __LINE__);                      \
-    if ((fprint_result) < 0)                                                   \
-      perror("fprintf failed");                                                \
-  }
+/* ============================================================================
+ * Result / Error Code Definition
+ * ============================================================================
+ */
 
+/*
+ * Result codes:
+ *   0        : Success
+ *   -1xx     : Parameter errors
+ *   -2xx     : State errors
+ *   -3xx     : Runtime errors
+ *   -4xx     : System errors
+ */
 typedef enum Result {
-  kUnderflow = -14,
-  kOverflow = -13,
-  kSystemError = -12,
-  kSecurityError = -11,
-  kOutputPointerIsNotNull = -10,
-  kDuplicate = -9,
-  kNotFound = -8,
-  kEmpty = -7,
-  kDependancyError = -6,
-  kArgumentOutOfRange = -5,
-  kInvalidIndex = -4,
-  kArithmeticOverflow = -3,
-  kFailedMemoryAllocation = -2,
-  kNullParameter = -1,
-  kSuccess = 0
+  /* ===== Success ===== */
+  kSuccess = 0,
+
+  /* ===== Parameter Errors (-1xx) ===== */
+  kNullParameter = -100,
+  kInvalidArgument = -101,
+  kOutputPointerIsNotNull = -102,
+  kArgumentOutOfRange = -103,
+  kArithmeticOverflow = -104,
+  kArithmeticUnderflow = -105,
+  kInvalidIndex = -106,
+
+  /* ===== State Errors (-2xx) ===== */
+  kEmpty = -200,
+  kFull = -201,
+  kNotFound = -202,
+  kDuplicate = -203,
+  kCorruptedArray = -204,
+
+  /* ===== Runtime Errors (-3xx) ===== */
+  kFailedMemoryAllocation = -300,
+  kOverflow = -301,
+  kUnderflow = -302,
+  kDependencyError = -303,
+
+  /* ===== System Errors (-4xx) ===== */
+  kSecurityError = -400,
+  kSystemError = -401
 } Result;
 
+/* Optional alias for semantic clarity */
 typedef Result ResultCode;
 
-char *Result_ErrorMessage(Result);
+/* ============================================================================
+ * Utility API
+ * ============================================================================
+ */
+
+/**
+ * @brief Check if result indicates success.
+ *
+ * @param r Result code
+ * @return 1 if success, 0 otherwise
+ */
+static inline int Result_IsSuccess(Result r) { return r == kSuccess; }
+
+/**
+ * @brief Check if result indicates failure.
+ *
+ * @param r Result code
+ * @return 1 if failure, 0 otherwise
+ */
+static inline int Result_IsFailure(Result r) { return r != kSuccess; }
+
+/**
+ * @brief Convert result code to human-readable message.
+ *
+ * @param r Result code
+ * @return Constant string describing the error
+ *
+ * @note Implementation must not return NULL.
+ */
+const char *Result_ErrorMessage(Result r);
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* RESULT_CODE_H */
