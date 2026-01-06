@@ -1,12 +1,12 @@
-#include "stack.h"
+#include "data_structures/stack/stack.h"
 
 #include <stdlib.h>
 
-#include "../../utils/test_helpers.h"
 #include "CUnit/CUnit.h"
+#include "utils/test/test_helpers.h"
 
 #if !defined(NDEBUG)
-#include "../../utils/malloc_test_wrapper.h"
+#include "utils/test/malloc_test_wrapper.h"
 #endif
 
 typedef struct Stack_Item {
