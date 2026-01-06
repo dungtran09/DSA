@@ -37,3 +37,8 @@ Thumbs.db
 *.tmp
 *.temp
 
+# Build artifacts
+compile_commands.json
+
+# Editor / tooling
+.cache/
