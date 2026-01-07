@@ -2,7 +2,7 @@
 
 #include <stdbool.h>
 
-#include "../../utils/result_code.h"
+#include "utils/result_code.h"
 
 struct Stack_t;
 typedef struct Stack_t Stack;
