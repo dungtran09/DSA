@@ -10,7 +10,11 @@ ResultCode Array_Create(size_t item_size, Array **result) {
   if (result)
     *result = NULL;
 
-  if (item_size == 0 || result == NULL)
+  if (result == NULL) {
+    return kNullParameter;
+  }
+
+  if (item_size == 0)
     return kInvalidArgument;
 
   if (*result != NULL)
