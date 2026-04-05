@@ -80,10 +80,19 @@ file(GLOB_RECURSE TEST_SOURCES
 src/**/*_test.c
 src/**/test/*.c
 )
+set(TEST_SOURCES
+    tests/array/test_array_create.c
+    tests/array/test_array_destroy.c
+)
 
 add_executable(run_tests
-${TEST_SOURCES}
-tests/test_runner.c
+    ${TEST_SOURCES}
+    tests/test_runner.c
+    src/utils/test/malloc_test_wrapper.c
+)
+
+target_include_directories(run_tests PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
 )
 
 # malloc wrapper (debug / test)
@@ -97,7 +106,7 @@ target_link_options(run_tests PRIVATE
 
 target_link_libraries(run_tests
 core
-${CUNIT_LIB}
+# ${CUNIT_LIB}
 )
 
 # Test only use punlic API
