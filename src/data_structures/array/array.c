@@ -37,3 +37,18 @@ ResultCode Array_Create(size_t item_size, Array **result) {
   *result = array;
   return kSuccess;
 }
+
+void Array_Destroy(Array *self) {
+  if (self == NULL)
+    return;
+  if (self->data != NULL) {
+    free(self->data);
+    self->data = NULL;
+  };
+
+  self->size = 0;
+  self->capacity = 0;
+  self->item_size = 0;
+
+  free(self);
+}
