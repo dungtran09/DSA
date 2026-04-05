@@ -14,8 +14,9 @@ typedef struct {
 } Array;
 
 // ===== LIFECYCLE =====
-Array *Array_Create(size_t item_size);
+ResultCode Array_Create(size_t item_size, Array **);
 void Array_Destroy(Array *);
+void Array_Clear(Array *);
 
 // ===== CAPACITY =====
 size_t Array_Size(const Array *);
@@ -30,7 +31,7 @@ void *Array_Data(Array *);
 const void *Array_DataConst(const Array *);
 
 // Safe access
-ResultCode Array_Get(const Array *, size_t index, void **out);
+ResultCode Array_Get(const Array *, size_t index, const void **out);
 ResultCode Array_Set(Array *, size_t index, const void *value);
 
 // Unsafe (fast)
@@ -40,7 +41,12 @@ void *Array_GetUnchecked(const Array *, size_t index);
 ResultCode Array_PushBack(Array *, const void *);
 ResultCode Array_PopBack(Array *);
 
+// Insert value at index
+// Valid range: 0 <= index <= size
+// index == size => equivalent to PushBack
+// index > size  => return RESULT_OUT_OF_RANGE
 ResultCode Array_Insert(Array *, size_t index, const void *);
+
 ResultCode Array_Remove(Array *, size_t index);
 
 #endif
