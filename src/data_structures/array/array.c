@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#define ARRAY_INITIAL_CAPACITY 4
+#define ARRAY_INITIAL_CAPACITY 16
 
 /* ============================================================================
  * INTERNAL HELPER FUNCTIONS (Private - not exposed in header)
@@ -178,4 +178,55 @@ size_t Array_Capacity(const Array *arr) {
 
 bool Array_IsEmpty(const Array *arr) {
   return arr == NULL ? true : arr->size == 0;
+}
+
+/**
+ * Array_Reserve - Reserves memory for a specific capacity
+ *
+ * Implementation flow:
+ * 1. Validate array not NULL
+ * 2. Ensure new_capacity >= current size
+ * 3. Check if capacity already matches (no-op)
+ * 4. Check for overflow in multiplication
+ * 5. Reallocate data buffer
+ * 6. Update capacity on success
+ *
+ * @param arr Array to modify
+ * @param new_capacity Desired capacity
+ * @return Result code
+ */
+ResultCode Array_Reserve(Array *arr, size_t new_capacity) {
+  /* Step 1: Validate array pointer */
+  if (arr == NULL) {
+    return kNullParameter;
+  }
+
+  /* Step 2: Cannot shrink below current size */
+  if (new_capacity < arr->size) {
+    return kInvalidArgument;
+  }
+
+  /* Step 3: No change needed */
+  if (new_capacity == arr->capacity) {
+    return kSuccess;
+  }
+
+  /* Step 4: Check for overflow before allocation
+   * Example: new_capacity=1e9, item_size=1e9 -> 1e18 > SIZE_MAX
+   * Formula: item_size > SIZE_MAX / new_capacity -> overflow
+   */
+  if (new_capacity > 0 && arr->item_size > SIZE_MAX / new_capacity) {
+    return kArithmeticOverflow;
+  }
+
+  /* Step 5: Reallocate memory */
+  void *new_data = realloc(arr->data, new_capacity * arr->size);
+  if (new_data == NULL && new_capacity > 0) {
+    return kFailedMemoryAllocation;
+  }
+
+  /* Step 6: Update array state */
+  arr->data = new_data;
+  arr->capacity = new_capacity;
+  return kSuccess;
 }
