@@ -253,3 +253,15 @@ ResultCode Array_ShrinkToFit(Array *arr) {
   /* Reverve with capacity = size */
   return Array_Reserve(arr, arr->size);
 }
+
+/**
+ * Array_Data - Return raw pointer to internal data (non-const)
+ * Warning: REturn NULL if array is NULL or data is NULL
+ * Caller must ensure safe usage of this pointer.
+ */
+void *Array_Data(Array *arr) {
+  if (arr == NULL) {
+    return NULL;
+  }
+  return arr->data;
+}
