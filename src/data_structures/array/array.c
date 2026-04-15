@@ -230,3 +230,26 @@ ResultCode Array_Reserve(Array *arr, size_t new_capacity) {
   arr->capacity = new_capacity;
   return kSuccess;
 }
+/**
+ * Array_ShrinkToFit - Reduces capacity to exactly match size
+ *
+ * Frees any unused memory. Useful when the array has grown large
+ * but then many elements were removed.
+ *
+ * @param arr Array to shrink
+ * @return Result code
+ */
+
+ResultCode Array_ShrinkToFit(Array *arr) {
+  if (arr == NULL) {
+    return kNullParameter;
+  }
+
+  /* No need to shrink if already at minimum */
+  if (arr->size == arr->capacity) {
+    return kSuccess;
+  }
+
+  /* Reverve with capacity = size */
+  return Array_Reserve(arr, arr->size);
+}
